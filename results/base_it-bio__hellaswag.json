@@ -1,0 +1,25 @@
+{
+  "ckpt": "/autodl-fs/data/omnigene_v2/models/gemma-4-26B-A4B-it-bio",
+  "tag": "base_it-bio",
+  "task": "hellaswag",
+  "num_fewshot": 10,
+  "limit": null,
+  "results": {
+    "hellaswag": {
+      "name": "hellaswag",
+      "alias": "hellaswag",
+      "sample_len": 10042,
+      "acc,none": 0.3798048197570205,
+      "acc_stderr,none": "N/A",
+      "acc_norm,none": 0.48645688109938257,
+      "acc_norm_stderr,none": "N/A"
+    }
+  },
+  "n-samples": {
+    "hellaswag": {
+      "original": 10042,
+      "effective": 10042
+    }
+  },
+  "elapsed_s": 4485.7
+}

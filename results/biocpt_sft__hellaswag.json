@@ -1,0 +1,25 @@
+{
+  "ckpt": "/root/autodl-tmp/dnagpt/outputs/OmniGene-4-v5-merged",
+  "tag": "biocpt_sft",
+  "task": "hellaswag",
+  "num_fewshot": 10,
+  "limit": null,
+  "results": {
+    "hellaswag": {
+      "name": "hellaswag",
+      "alias": "hellaswag",
+      "sample_len": 10042,
+      "acc,none": 0.37661820354511055,
+      "acc_stderr,none": "N/A",
+      "acc_norm,none": 0.48645688109938257,
+      "acc_norm_stderr,none": "N/A"
+    }
+  },
+  "n-samples": {
+    "hellaswag": {
+      "original": 10042,
+      "effective": 10042
+    }
+  },
+  "elapsed_s": 3011.6
+}

@@ -1,0 +1,23 @@
+{
+  "ckpt": "/root/autodl-tmp/dnagpt/outputs/OmniGene-4-v5-merged",
+  "tag": "biocpt_sft",
+  "task": "humaneval",
+  "num_fewshot": 0,
+  "limit": null,
+  "results": {
+    "humaneval": {
+      "name": "humaneval",
+      "alias": "humaneval",
+      "sample_len": 164,
+      "pass@1,create_test": 0.0,
+      "pass@1_stderr,create_test": "N/A"
+    }
+  },
+  "n-samples": {
+    "humaneval": {
+      "original": 164,
+      "effective": 164
+    }
+  },
+  "elapsed_s": 1439.8
+}

@@ -1,0 +1,23 @@
+{
+  "ckpt": "/autodl-fs/data/omnigene_v2/models/gemma-4-26B-A4B-it-bio",
+  "tag": "base_it-bio",
+  "task": "humaneval",
+  "num_fewshot": 0,
+  "limit": null,
+  "results": {
+    "humaneval": {
+      "name": "humaneval",
+      "alias": "humaneval",
+      "sample_len": 164,
+      "pass@1,create_test": 0.0,
+      "pass@1_stderr,create_test": "N/A"
+    }
+  },
+  "n-samples": {
+    "humaneval": {
+      "original": 164,
+      "effective": 164
+    }
+  },
+  "elapsed_s": 1449.3
+}

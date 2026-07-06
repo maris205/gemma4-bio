@@ -1,0 +1,23 @@
+{
+  "ckpt": "/autodl-fs/data/omnigene_v2/models/gemma-4-26B-A4B-it",
+  "tag": "base_it_orig",
+  "task": "mbpp",
+  "num_fewshot": 3,
+  "limit": null,
+  "results": {
+    "mbpp": {
+      "name": "mbpp",
+      "alias": "mbpp",
+      "sample_len": 500,
+      "pass_at_1,none": 0.332,
+      "pass_at_1_stderr,none": "N/A"
+    }
+  },
+  "n-samples": {
+    "mbpp": {
+      "original": 500,
+      "effective": 500
+    }
+  },
+  "elapsed_s": 1147.6
+}

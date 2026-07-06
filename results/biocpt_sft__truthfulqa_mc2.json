@@ -1,0 +1,23 @@
+{
+  "ckpt": "/root/autodl-tmp/dnagpt/outputs/OmniGene-4-v5-merged",
+  "tag": "biocpt_sft",
+  "task": "truthfulqa_mc2",
+  "num_fewshot": 0,
+  "limit": null,
+  "results": {
+    "truthfulqa_mc2": {
+      "name": "truthfulqa_mc2",
+      "alias": "truthfulqa_mc2",
+      "sample_len": 817,
+      "acc,none": 0.5624722194283546,
+      "acc_stderr,none": "N/A"
+    }
+  },
+  "n-samples": {
+    "truthfulqa_mc2": {
+      "original": 817,
+      "effective": 817
+    }
+  },
+  "elapsed_s": 117.5
+}

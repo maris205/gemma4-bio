@@ -1,0 +1,23 @@
+{
+  "ckpt": "/autodl-fs/data/omnigene_v2/models/gemma-4-26B-A4B-bio",
+  "tag": "biocpt",
+  "task": "truthfulqa_mc2",
+  "num_fewshot": 0,
+  "limit": null,
+  "results": {
+    "truthfulqa_mc2": {
+      "name": "truthfulqa_mc2",
+      "alias": "truthfulqa_mc2",
+      "sample_len": 817,
+      "acc,none": 0.4451565902583444,
+      "acc_stderr,none": "N/A"
+    }
+  },
+  "n-samples": {
+    "truthfulqa_mc2": {
+      "original": 817,
+      "effective": 817
+    }
+  },
+  "elapsed_s": 130.5
+}

@@ -1,0 +1,26 @@
+{
+  "ckpt": "/autodl-fs/data/omnigene_v2/models/gemma-4-26B-A4B-it-bio",
+  "tasks": [
+    "arc_easy"
+  ],
+  "limit": 40,
+  "num_fewshot": 0,
+  "results": {
+    "arc_easy": {
+      "name": "arc_easy",
+      "alias": "arc_easy",
+      "sample_len": 40,
+      "acc,none": 0.375,
+      "acc_stderr,none": "N/A",
+      "acc_norm,none": 0.4,
+      "acc_norm_stderr,none": "N/A"
+    }
+  },
+  "n-samples": {
+    "arc_easy": {
+      "original": 2376,
+      "effective": 40
+    }
+  },
+  "elapsed_s": 49.8
+}

@@ -1,0 +1,23 @@
+{
+  "ckpt": "/root/autodl-tmp/dnagpt/outputs/OmniGene-4-v5-merged",
+  "tag": "biocpt_sft",
+  "task": "mbpp",
+  "num_fewshot": 3,
+  "limit": null,
+  "results": {
+    "mbpp": {
+      "name": "mbpp",
+      "alias": "mbpp",
+      "sample_len": 500,
+      "pass_at_1,none": 0.348,
+      "pass_at_1_stderr,none": "N/A"
+    }
+  },
+  "n-samples": {
+    "mbpp": {
+      "original": 500,
+      "effective": 500
+    }
+  },
+  "elapsed_s": 1214.0
+}

@@ -1,0 +1,32 @@
+
+\subsection{A division of labor between CPT and SFT}
+The recurring shape of our results --- base $<$ BioCPT $>$ SFT on every held-out axis --- points
+to a division of labor that is usually conflated. Continued pretraining does not simply add
+domain facts; it \emph{re-organizes and lifts a shared capability substrate} that is then
+visible on tasks (general knowledge, code) far from the pretraining domain. Supervised
+fine-tuning does the opposite: it \emph{narrows} the model onto the target task distribution,
+trading breadth on held-out axes for focus on the served task. Neither stage is a substitute
+for the other, and budgeting them as interchangeable --- or omitting CPT to ``save compute'' ---
+misreads their roles. This is consistent with, and sharpens, prior router-level evidence on this
+model family that CPT reshapes middle-layer computation while SFT re-aligns the output.
+
+\subsection{Biological sequence as structured scientific data}
+If narrow, out-of-distribution biological sequence \emph{raises} general and coding competence,
+then the ``narrow domain = capacity competition'' framing is inadequate. We propose instead that
+biological sequence functions as \emph{structured scientific data}: a corpus whose value to a
+foundation model lies not (only) in the facts it carries but in the structural regularities it
+forces the model to internalize --- regularities that transfer to other structured/formal
+languages such as code. Under this view biology is simply the first representative member of a
+broader class (code, mathematics, chemistry/SMILES), and the natural next question is not
+``does biology help biology'' but ``how does the \emph{composition} of scientific-data CPT
+shape the capability profile of a foundation model.''
+
+\subsection{Limitations}
+This is a training-free re-analysis of one lineage of one 26B MoE model; the CPT / SFT recipe is
+fixed, so we characterize \emph{this} lineage rather than establishing a scaling law. Part of the
+ARC/HellaSwag gain is a format effect (instruct-vs-completion loglikelihood), which we flag and
+which does not affect the knowledge-heavy MMLU gain. Zero-shot sequence-homology is not
+measurable by simple probes, so that axis is argued indirectly. TruthfulQA is a genuine, if
+small, regression and we do not hide it. Establishing the optimal CPT data mixture, and testing
+whether the CPT-lifts / SFT-narrows pattern generalizes across model sizes and domains, is the
+subject of the mixture-pretraining program we outline as future work.

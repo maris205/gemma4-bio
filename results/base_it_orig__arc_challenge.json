@@ -1,0 +1,25 @@
+{
+  "ckpt": "/autodl-fs/data/omnigene_v2/models/gemma-4-26B-A4B-it",
+  "tag": "base_it_orig",
+  "task": "arc_challenge",
+  "num_fewshot": 25,
+  "limit": null,
+  "results": {
+    "arc_challenge": {
+      "name": "arc_challenge",
+      "alias": "arc_challenge",
+      "sample_len": 1172,
+      "acc,none": 0.36689419795221845,
+      "acc_stderr,none": "N/A",
+      "acc_norm,none": 0.40273037542662116,
+      "acc_norm_stderr,none": "N/A"
+    }
+  },
+  "n-samples": {
+    "arc_challenge": {
+      "original": 1172,
+      "effective": 1172
+    }
+  },
+  "elapsed_s": 442.3
+}

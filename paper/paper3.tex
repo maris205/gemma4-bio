@@ -1,0 +1,187 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath, amssymb}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{float}
+\usepackage[hidelinks]{hyperref}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage{xcolor}
+\usepackage{caption}
+\usepackage{lineno}
+\linenumbers
+\captionsetup{font=small,labelfont=bf}
+
+\title{\textbf{Biological Continued Pretraining Reshapes the Capability\\
+Profile of a Foundation Model Without Catastrophic Forgetting}}
+
+\author{Liang Wang\thanks{Corresponding author. Email: wangliang.f@gmail.com}\\
+\small School of Artificial Intelligence and Automation\\
+\small Huazhong University of Science and Technology\\
+\small Wuhan, Hubei 430070, P.R. China}
+\date{July 2026}
+
+\begin{document}
+\maketitle
+
+\noindent\textbf{Highlights}
+\begin{itemize}\itemsep2pt
+\item A training-free re-analysis of one 26B MoE lineage isolates the effect of biological
+continued pretraining (CPT) from tokenizer changes and from fine-tuning.
+\item Biological CPT does not cause catastrophic forgetting; it \emph{raises} general knowledge
+(MMLU $+13$ pts) and code generation (MBPP pass@1 $0.33\!\to\!0.63$).
+\item CPT also makes chain-of-thought reasoning 41\% shorter and near-backtrack-free while
+preserving accuracy --- an effect invisible to accuracy metrics.
+\item A consistent CPT-lifts / SFT-narrows division of labor recurs across four axes, reframing
+biological sequence as structured scientific data that reshapes a model's capability profile.
+\end{itemize}
+
+\bigskip
+\noindent\fbox{\parbox{\linewidth}{%
+\textbf{The Bigger Picture.}\\[2pt]
+Adapting a general-purpose AI model to a specialized domain --- here, the language of DNA and
+proteins --- is usually assumed to come at a cost: teach it biology and it forgets how to reason
+about everything else. This ``no free lunch'' intuition shapes how practitioners budget compute
+and whether they attempt domain adaptation at all. We test the assumption directly, and without
+running any new training, by comparing three snapshots of the same model taken before and after
+biological training. The result overturns the intuition: feeding the model raw biological
+sequence made it \emph{better} at general knowledge, at writing code, and even changed \emph{how}
+it reasons --- producing shorter, more decisive chains of thought without losing accuracy. The
+gains appear during the sequence-pretraining stage and are partly given back during
+task-specific fine-tuning, revealing that the two stages play complementary rather than
+interchangeable roles. This suggests a broader principle for data-centric AI: structured
+scientific data --- biological sequence today, and by extension code, mathematics, and
+chemistry --- is not merely knowledge to be absorbed but a lever that reshapes what a foundation
+model can do.
+}}
+\bigskip
+
+\begin{abstract}
+\noindent It is widely assumed that continued pretraining (CPT) on a narrow, out-of-distribution
+corpus such as raw biological sequence must trade away a general-purpose model's broad
+competence --- the ``alignment tax'' or catastrophic-forgetting intuition. We test this
+directly, without any new training, by re-analyzing three checkpoints from a single lineage
+of a 26B-parameter Mixture-of-Experts model (Gemma-4-26B-A4B): the instruction-tuned base,
+the same model after biological CPT (8.7B tokens of DNA, protein, and biomedical text), and
+after subsequent supervised fine-tuning (SFT). Across three independent capability axes ---
+general knowledge/reasoning (MMLU, ARC, HellaSwag), code generation (MBPP), and biomedical
+knowledge (BixBench) --- we find that biological CPT does \emph{not} degrade the model; it
+\textbf{lifts} it: MMLU $+13$ points, MBPP pass@1 nearly doubles ($0.33\!\to\!0.63$), and
+BixBench discrimination rises sharply (MCC $0.23\!\to\!0.92$). The single measured regression
+is truthfulness (TruthfulQA $-8.8$ points), a small and interpretable domain drift. A clean
+vocabulary-expansion ablation ($<\!0.4$ pt on every general metric) confirms the gains are
+attributable to CPT, not tokenizer changes. Crucially, subsequent SFT \emph{narrows} the model
+back: all three axes fall to near-base levels, revealing a consistent division of labor ---
+\textbf{CPT re-organizes and lifts the shared capability substrate; SFT cashes it out onto
+target tasks}. We argue this reframes biological sequence not as a competitor for a foundation
+model's capacity but as a form of structured scientific data that reshapes its capability
+profile, and that CPT and SFT should be budgeted as complementary rather than substitutable
+stages. All checkpoints, evaluation code, and per-example outputs are public.
+\end{abstract}
+
+\medskip
+\noindent\textbf{Keywords:} foundation models, continued pretraining, catastrophic forgetting,
+data-centric AI, mixture-of-experts, capability transfer, structured scientific data.
+
+% ===================================================================
+\section{Introduction}
+\label{sec:intro}
+
+
+The dominant intuition about continued pretraining (CPT) on a narrow domain corpus is
+subtractive: pouring out-of-distribution tokens --- raw protein and DNA sequence, which share
+almost no surface statistics with natural language --- into a general-purpose model is expected
+to erode its broad competence, a phenomenon variously described as the \emph{alignment tax} or
+\emph{catastrophic forgetting} \citep{luo2023forgetting, ibrahim2024cpt}. Under this view,
+domain adaptation is a trade: one buys biological ability at the cost of general ability, and
+the practitioner's job is to minimize the damage.
+
+This paper argues that, for a modern Mixture-of-Experts foundation model, the intuition is
+wrong --- or at least incomplete. We show, by \emph{re-analysis of existing checkpoints and
+without any new training}, that biological CPT on a 26B-parameter model does not merely avoid
+catastrophic forgetting; it \emph{improves} the model on capability axes that have nothing to do
+with biology, including general knowledge (MMLU~\citep{hendrycks2020measuring}) and code
+generation (MBPP). We then show that
+the subsequent supervised fine-tuning (SFT) stage, far from adding capability, \emph{narrows}
+the model back toward its base competence on held-out axes. The picture that emerges is a clean
+division of labor between the two training stages, and it suggests a reframing of what
+biological data \emph{is} to a foundation model.
+
+Our substrate is a Mixture-of-Experts model~\citep{shazeer2017sparse, fedus2022switch,
+jiang2024mixtral} (Gemma-4-26B-A4B~\citep{gemmateam2025}); the analysis is deliberately
+training-free, re-using an existing CPT/SFT lineage~\citep{ibrahim2024cpt} so that every
+capability difference is attributable to a single stage. This complements router-level
+interpretability of the same model family~\citep{park2024moeinterpret, kanai2025moeinterp} by
+asking not \emph{where} computation is organized but \emph{how} the training data reshapes what
+the model can do.
+
+\paragraph{Related work.}
+Our claim sits at the intersection of three literatures. \emph{Continued pretraining and
+forgetting}: domain-adaptive CPT is standard practice~\citep{ibrahim2024cpt, jindal2024balance,
+jiang2024instruction}, but is widely reported to risk catastrophic forgetting of general
+ability~\citep{luo2023forgetting, huang2024sssr}, motivating replay and balancing schemes. Most
+of this evidence is on dense models and measures forgetting as a cost to be minimized; we instead
+find a net \emph{gain} on a sparse MoE model and attribute it to the structural regularity of the
+pretraining corpus rather than its factual content. \emph{Biological foundation models}: protein
+and genomic models --- ESM-2~\citep{lin2023evolutionary}, ProtT5~\citep{elnaggar2021prottrans},
+DNABERT-2~\citep{zhou2023dnabert2}, Nucleotide Transformer~\citep{dallatorre2023nucleotide}, the
+Evo family~\citep{nguyen2024evo, brixi2026evo2}, and cross-modal LucaOne~\citep{he2024lucaone}, as
+well as LLMs adapted to biology~\citep{luo2022biogpt, wang2026biopaws, wang2024llamagene} --- are
+typically evaluated only on in-domain tasks, leaving open whether biological training helps or
+harms general competence. \emph{Data-centric AI and scaling}: work on pretraining-data
+composition and its effect on capability~\citep{gadre2021pile, hoffmann2022chinchilla} argues that
+\emph{what} a model is trained on shapes \emph{what} it can do; we provide a controlled,
+single-lineage instance of this principle where the manipulated variable is a scientific-sequence
+corpus and the readout spans knowledge, code, and reasoning behavior. To our knowledge no prior
+work reports that biological CPT \emph{improves} general and coding benchmarks, nor that it
+measurably alters reasoning style.
+
+\paragraph{Contributions.}
+(i) A training-free re-analysis protocol over a single checkpoint lineage that isolates the
+effect of biological CPT from tokenizer changes and from SFT. (ii) Evidence that biological CPT
+lifts, rather than degrades, general and code capability, with a single interpretable regression
+(truthfulness). (iii) A consistent CPT-lifts / SFT-narrows division of labor observed across four
+independent evaluation axes. (iv) A data-centric reframing: biological sequence as structured
+scientific data that reshapes a foundation model's capability profile.
+
+% ===================================================================
+\section{Setup: one lineage, three checkpoints}
+\label{sec:setup}
+\input{sec_setup}
+
+% ===================================================================
+\section{Results}
+\label{sec:results}
+\input{sec_results}
+
+% ===================================================================
+\section{Discussion}
+\label{sec:discussion}
+\input{sec_discussion}
+
+\section*{Data and code availability}
+All three (four) checkpoints derive from a public lineage of Gemma-4-26B-A4B; the merged
+BioCPT checkpoint is released as \texttt{dnagpt/OmniGene-4-CPT-v2-merged}. Evaluation scripts
+(general, coding, biology-loglikelihood, and chain-of-thought diagnostics), the exact few-shot
+configurations, and per-example model outputs for every table in this paper are released at
+the project repository. All benchmarks (MMLU, ARC, HellaSwag, TruthfulQA, MBPP, HumanEval,
+GSM8K, BixBench) are public; no proprietary data were used. The entire study is a
+training-free re-analysis and reproduces on a single 96\,GB GPU.
+
+\section*{Acknowledgments}
+% [placeholder]
+
+\section*{Declaration of interests}
+The author declares no competing interests.
+
+\bibliographystyle{unsrtnat}
+\bibliography{refs}
+
+\end{document}

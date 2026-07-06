@@ -1,0 +1,43 @@
+
+Our analysis rests on a single training lineage, so that every capability difference we
+report can be attributed to a specific training stage rather than to confounds of architecture,
+tokenizer, or data version.
+
+\paragraph{Base model.} All checkpoints derive from Gemma-4-26B-A4B, a Mixture-of-Experts
+transformer (128 experts per layer, top-8 routing, ${\approx}3.8$B active parameters). We use
+the instruction-tuned release as the origin of the lineage.
+
+\paragraph{The three (four) checkpoints.} The lineage is
+\[
+\text{it} \;\xrightarrow{\text{vocab-expand}}\; \text{it-bio} \;\xrightarrow{\text{bio-CPT}}\;
+\text{BioCPT} \;\xrightarrow{\text{SFT}}\; \text{BioCPT+SFT}.
+\]
+\textbf{(1) Base (it):} the original instruction-tuned model, vocabulary $262{,}144$.
+\textbf{(2) Base (it-bio):} identical weights with the vocabulary expanded to $290{,}172$ by
+adding $28{,}028$ biological BPE tokens (DNA/protein), but \emph{no further training}; this
+serves as a clean control that isolates the cost of tokenizer expansion alone.
+\textbf{(3) BioCPT:} it-bio after continued pretraining on $8.7$B tokens of mixed biological
+corpus (DNA, protein sequence, and biomedical literature text), with LoRA ($r{=}64$) over
+attention, MLP, and the MoE router, embeddings unfrozen; merged to full weights.
+\textbf{(4) BioCPT+SFT:} BioCPT after supervised fine-tuning on biological instruction data
+(a dual-head structural variant, ``v5''); merged to full weights.
+We verified the lineage by direct weight comparison: it and it-bio share router/expert weights
+bit-for-bit (mean abs.\ diff.\ $0$), differing only in embeddings, while BioCPT's router and
+expert weights have measurably moved.
+
+\paragraph{Evaluation.} We use the \texttt{lm-evaluation-harness} (v0.4.12) for all general and
+coding benchmarks, at community-standard few-shot settings (MMLU 5-shot, ARC-Challenge 25-shot,
+HellaSwag 10-shot, TruthfulQA-mc2 0-shot; HumanEval 0-shot, MBPP 3-shot). Multiple-choice tasks
+are scored by loglikelihood, which is robust to a model's chat-vs-completion output format ---
+a property we exploit deliberately, since our lineage mixes an instruction-tuned base with a
+completion-style CPT checkpoint. Biomedical discrimination (BixBench) is likewise scored by
+loglikelihood of the answer choices, and reasoning-behavior diagnostics (\S\ref{sec:results})
+use a shared 8-shot chain-of-thought scaffold. All runs are on a single 96\,GB GPU in bfloat16;
+the full model ($\approx$52\,GB) fits on one card, and the entire study required no training.
+
+\paragraph{Honest scope.} Two evaluation regimes are format-sensitive and we flag them up front.
+HumanEval 0-shot (bare function-completion) is unfair to instruction/SFT checkpoints and we
+exclude it from conclusions, reporting MBPP 3-shot as the fair coding metric. Zero-shot protein
+\emph{homology} is not measurable by any simple probe we tried (forced Yes/No loglikelihood is
+near-random for all checkpoints; free generation is format-confounded); we therefore treat
+sequence-homology ability separately and do not force it into the transfer analysis.
