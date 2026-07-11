@@ -1,0 +1,28 @@
+{
+  "tag": "C1-protein",
+  "task": "gsm8k",
+  "mix": {
+    "text": 0.8,
+    "protein": 0.2
+  },
+  "num_fewshot": 5,
+  "limit": null,
+  "results": {
+    "gsm8k": {
+      "name": "gsm8k",
+      "alias": "gsm8k",
+      "sample_len": 1319,
+      "exact_match,strict-match": 0.8536770280515542,
+      "exact_match_stderr,strict-match": "N/A",
+      "exact_match,flexible-extract": 0.8567096285064443,
+      "exact_match_stderr,flexible-extract": "N/A"
+    }
+  },
+  "n-samples": {
+    "gsm8k": {
+      "original": 1319,
+      "effective": 1319
+    }
+  },
+  "elapsed_s": 2525.2
+}

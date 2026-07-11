@@ -1,0 +1,28 @@
+{
+  "tag": "M1-bio5",
+  "task": "truthfulqa_mc2",
+  "mix": {
+    "text": 0.95,
+    "protein": 0.035,
+    "dna": 0.01,
+    "biolit": 0.005
+  },
+  "num_fewshot": 0,
+  "limit": null,
+  "results": {
+    "truthfulqa_mc2": {
+      "name": "truthfulqa_mc2",
+      "alias": "truthfulqa_mc2",
+      "sample_len": 817,
+      "acc,none": 0.5239017254201358,
+      "acc_stderr,none": "N/A"
+    }
+  },
+  "n-samples": {
+    "truthfulqa_mc2": {
+      "original": 817,
+      "effective": 817
+    }
+  },
+  "elapsed_s": 137.5
+}

@@ -1,0 +1,25 @@
+{
+  "tag": "M0-base",
+  "task": "truthfulqa_mc2",
+  "mix": {
+    "text": 1.0
+  },
+  "num_fewshot": 0,
+  "limit": null,
+  "results": {
+    "truthfulqa_mc2": {
+      "name": "truthfulqa_mc2",
+      "alias": "truthfulqa_mc2",
+      "sample_len": 817,
+      "acc,none": 0.5448040458300524,
+      "acc_stderr,none": "N/A"
+    }
+  },
+  "n-samples": {
+    "truthfulqa_mc2": {
+      "original": 817,
+      "effective": 817
+    }
+  },
+  "elapsed_s": 133.3
+}

@@ -1,0 +1,79 @@
+{
+  "M0-base": {
+    "gsm8k": 0.8734,
+    "truthfulqa_mc2": 0.5448,
+    "mmlu": 0.8024,
+    "protein_homology_std_acc": 0.8018,
+    "protein_homology_std_mcc": 0.2284,
+    "protein_homology_remote_acc": 0.4728,
+    "protein_homology_remote_mcc": -0.0228,
+    "f8_bixbench_tf_acc": 0.9366,
+    "f8_bixbench_tf_mcc": 0.8495
+  },
+  "M1-bio5": {
+    "gsm8k": 0.8666,
+    "truthfulqa_mc2": 0.5239,
+    "mmlu": 0.8005,
+    "protein_homology_std_acc": 0.7568,
+    "protein_homology_std_mcc": 0.2696,
+    "protein_homology_remote_acc": 0.4629,
+    "protein_homology_remote_mcc": -0.0554,
+    "f8_bixbench_tf_acc": 0.9512,
+    "f8_bixbench_tf_mcc": 0.8821
+  },
+  "M2-bio20": {
+    "gsm8k": 0.8666,
+    "truthfulqa_mc2": 0.5209,
+    "mmlu": 0.8,
+    "protein_homology_std_acc": 0.7883,
+    "protein_homology_std_mcc": 0.2171,
+    "protein_homology_remote_acc": 0.4703,
+    "protein_homology_remote_mcc": -0.0741,
+    "f8_bixbench_tf_acc": 1.0,
+    "f8_bixbench_tf_mcc": 1.0
+  },
+  "M3-bio50": {
+    "gsm8k": 0.8613,
+    "truthfulqa_mc2": 0.5187,
+    "mmlu": 0.7964,
+    "protein_homology_std_acc": 0.8477,
+    "protein_homology_std_mcc": 0.3752,
+    "protein_homology_remote_acc": 0.4901,
+    "protein_homology_remote_mcc": 0.0878,
+    "f8_bixbench_tf_acc": 1.0,
+    "f8_bixbench_tf_mcc": 1.0
+  },
+  "C1-protein": {
+    "gsm8k": 0.8537,
+    "truthfulqa_mc2": 0.5338,
+    "mmlu": 0.8013,
+    "protein_homology_std_acc": 0.7288,
+    "protein_homology_std_mcc": 0.2467,
+    "protein_homology_remote_acc": 0.4752,
+    "protein_homology_remote_mcc": -0.0035,
+    "f8_bixbench_tf_acc": 0.9854,
+    "f8_bixbench_tf_mcc": 0.9661
+  },
+  "C2-dna": {
+    "gsm8k": 0.8582,
+    "truthfulqa_mc2": 0.5154,
+    "mmlu": 0.7939,
+    "protein_homology_std_acc": 0.8171,
+    "protein_homology_std_mcc": 0.3124,
+    "protein_homology_remote_acc": 0.4827,
+    "protein_homology_remote_mcc": 0.0429,
+    "f8_bixbench_tf_acc": 0.9366,
+    "f8_bixbench_tf_mcc": 0.8495
+  },
+  "C3-protdna": {
+    "gsm8k": 0.8552,
+    "truthfulqa_mc2": 0.535,
+    "mmlu": 0.802,
+    "protein_homology_std_acc": 0.7135,
+    "protein_homology_std_mcc": 0.2374,
+    "protein_homology_remote_acc": 0.4777,
+    "protein_homology_remote_mcc": 0.0246,
+    "f8_bixbench_tf_acc": 0.961,
+    "f8_bixbench_tf_mcc": 0.9138
+  }
+}

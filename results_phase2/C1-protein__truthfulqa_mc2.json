@@ -1,0 +1,26 @@
+{
+  "tag": "C1-protein",
+  "task": "truthfulqa_mc2",
+  "mix": {
+    "text": 0.8,
+    "protein": 0.2
+  },
+  "num_fewshot": 0,
+  "limit": null,
+  "results": {
+    "truthfulqa_mc2": {
+      "name": "truthfulqa_mc2",
+      "alias": "truthfulqa_mc2",
+      "sample_len": 817,
+      "acc,none": 0.5338282752720298,
+      "acc_stderr,none": "N/A"
+    }
+  },
+  "n-samples": {
+    "truthfulqa_mc2": {
+      "original": 817,
+      "effective": 817
+    }
+  },
+  "elapsed_s": 110.0
+}

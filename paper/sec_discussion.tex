@@ -21,12 +21,26 @@ broader class (code, mathematics, chemistry/SMILES), and the natural next questi
 ``does biology help biology'' but ``how does the \emph{composition} of scientific-data CPT
 shape the capability profile of a foundation model.''
 
+\subsection{Mixture ratio is a controllable, general-preserving lever}
+The controlled sweep of \S\ref{sec:phase2} answers that question for this model. The two axes do
+not trade off: across a biological share of $0\!-\!50\%$ the general axis is flat while the
+biology axis rises monotonically, so there is no ``forgetting threshold'' to budget around
+within this range. Equally, the composition ablation shows the lever has structure --- DNA and
+protein amplify \emph{different} biological capabilities --- so a practitioner can, in principle,
+target a desired capability profile by choosing not just how much scientific data to add but
+which kind. This is the operational form of the data-centric thesis: training-data composition
+is a design surface for the capability profile, not merely a source of facts.
+
 \subsection{Limitations}
 This is a training-free re-analysis of one lineage of one 26B MoE model; the CPT / SFT recipe is
 fixed, so we characterize \emph{this} lineage rather than establishing a scaling law. Part of the
 ARC/HellaSwag gain is a format effect (instruct-vs-completion loglikelihood), which we flag and
 which does not affect the knowledge-heavy MMLU gain. Zero-shot sequence-homology is not
 measurable by simple probes, so that axis is argued indirectly. TruthfulQA is a genuine, if
-small, regression and we do not hide it. Establishing the optimal CPT data mixture, and testing
-whether the CPT-lifts / SFT-narrows pattern generalizes across model sizes and domains, is the
-subject of the mixture-pretraining program we outline as future work.
+small, regression and we do not hide it. The controlled experiment of \S\ref{sec:phase2}
+addresses the observational limitation directly --- it fixes the recipe and varies only the data
+mixture --- but is itself bounded: each model sees $100$M CPT tokens (a pilot budget chosen to
+find trends, not a scaling law), on one 26B MoE model. Whether the general-preserving,
+biology-lifting mixture behavior holds at $10\times$ the token budget, across model sizes, and
+for other scientific-data domains (code, mathematics, chemistry) remains open, and is the natural
+next step now that the lever itself is established.

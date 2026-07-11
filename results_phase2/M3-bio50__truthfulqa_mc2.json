@@ -1,0 +1,28 @@
+{
+  "tag": "M3-bio50",
+  "task": "truthfulqa_mc2",
+  "mix": {
+    "text": 0.5,
+    "protein": 0.35,
+    "dna": 0.1,
+    "biolit": 0.05
+  },
+  "num_fewshot": 0,
+  "limit": null,
+  "results": {
+    "truthfulqa_mc2": {
+      "name": "truthfulqa_mc2",
+      "alias": "truthfulqa_mc2",
+      "sample_len": 817,
+      "acc,none": 0.51869721034379,
+      "acc_stderr,none": "N/A"
+    }
+  },
+  "n-samples": {
+    "truthfulqa_mc2": {
+      "original": 817,
+      "effective": 817
+    }
+  },
+  "elapsed_s": 154.5
+}

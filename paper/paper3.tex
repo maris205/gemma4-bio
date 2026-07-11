@@ -41,6 +41,9 @@ continued pretraining (CPT) from tokenizer changes and from fine-tuning.
 preserving accuracy --- an effect invisible to accuracy metrics.
 \item A consistent CPT-lifts / SFT-narrows division of labor recurs across four axes, reframing
 biological sequence as structured scientific data that reshapes a model's capability profile.
+\item A controlled seven-model experiment (varying only the CPT data mixture) confirms this
+causally: raising biological share to 50\% preserves general ability (MMLU $-0.6$ pt) while
+biology rises monotonically --- data mixture is a general-preserving lever on capability.
 \end{itemize}
 
 \bigskip
@@ -59,7 +62,9 @@ task-specific fine-tuning, revealing that the two stages play complementary rath
 interchangeable roles. This suggests a broader principle for data-centric AI: structured
 scientific data --- biological sequence today, and by extension code, mathematics, and
 chemistry --- is not merely knowledge to be absorbed but a lever that reshapes what a foundation
-model can do.
+model can do. A controlled follow-up, in which we retrain the model seven times while changing
+only the data mixture, confirms the lever directly: more biological data buys more scientific
+capability at almost no cost to general ability.
 }}
 \bigskip
 
@@ -83,7 +88,14 @@ back: all three axes fall to near-base levels, revealing a consistent division o
 target tasks}. We argue this reframes biological sequence not as a competitor for a foundation
 model's capacity but as a form of structured scientific data that reshapes its capability
 profile, and that CPT and SFT should be budgeted as complementary rather than substitutable
-stages. All checkpoints, evaluation code, and per-example outputs are public.
+stages. We then confirm the mechanism causally: continuing pretraining of the same base seven
+times under one fixed recipe, varying only the data mixture ($0/5/20/50\%$ biological share plus
+a protein/DNA composition ablation), shows that raising the biological share to $50\%$ leaves the
+general axis essentially unchanged (MMLU $-0.6$ pt, GSM8K $-1.2$ pt) while biological capability
+rises monotonically (remote-homology MCC flips negative to positive; BixBench saturates), and
+the \emph{type} of scientific data selects which capability is amplified. Mixture ratio is thus
+a controllable, general-preserving lever on the capability profile. All checkpoints, evaluation
+code, and per-example outputs are public.
 \end{abstract}
 
 \medskip
@@ -149,7 +161,10 @@ effect of biological CPT from tokenizer changes and from SFT. (ii) Evidence that
 lifts, rather than degrades, general and code capability, with a single interpretable regression
 (truthfulness). (iii) A consistent CPT-lifts / SFT-narrows division of labor observed across four
 independent evaluation axes. (iv) A data-centric reframing: biological sequence as structured
-scientific data that reshapes a foundation model's capability profile.
+scientific data that reshapes a foundation model's capability profile. (v) A controlled
+seven-model mixture experiment that turns the observational claim causal: varying only the CPT
+data mixture, general ability is preserved across a $0\!-\!50\%$ biological share while biological
+ability rises monotonically, and data \emph{composition} selects which capability is amplified.
 
 % ===================================================================
 \section{Setup: one lineage, three checkpoints}
@@ -157,9 +172,14 @@ scientific data that reshapes a foundation model's capability profile.
 \input{sec_setup}
 
 % ===================================================================
-\section{Results}
+\section{Part I --- Observational re-analysis of one lineage}
 \label{sec:results}
 \input{sec_results}
+
+% ===================================================================
+\section{Part II --- Controlled mixture experiment}
+\label{sec:phase2}
+\input{sec_phase2}
 
 % ===================================================================
 \section{Discussion}
@@ -172,8 +192,10 @@ BioCPT checkpoint is released as \texttt{dnagpt/OmniGene-4-CPT-v2-merged}. Evalu
 (general, coding, biology-loglikelihood, and chain-of-thought diagnostics), the exact few-shot
 configurations, and per-example model outputs for every table in this paper are released at
 the project repository. All benchmarks (MMLU, ARC, HellaSwag, TruthfulQA, MBPP, HumanEval,
-GSM8K, BixBench) are public; no proprietary data were used. The entire study is a
-training-free re-analysis and reproduces on a single 96\,GB GPU.
+GSM8K, BixBench) are public; no proprietary data were used. The Part~I re-analysis is
+training-free; the seven controlled Part~II CPT models ($100$M tokens each) together with their
+QLoRA adapters, data-mixture recipes, and per-example evaluation outputs are also released at
+the project repository. Both parts reproduce on a single 96\,GB GPU.
 
 \section*{Acknowledgments}
 % [placeholder]

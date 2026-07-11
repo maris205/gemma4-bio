@@ -1,0 +1,28 @@
+{
+  "tag": "M2-bio20",
+  "task": "truthfulqa_mc2",
+  "mix": {
+    "text": 0.8,
+    "protein": 0.14,
+    "dna": 0.04,
+    "biolit": 0.02
+  },
+  "num_fewshot": 0,
+  "limit": null,
+  "results": {
+    "truthfulqa_mc2": {
+      "name": "truthfulqa_mc2",
+      "alias": "truthfulqa_mc2",
+      "sample_len": 817,
+      "acc,none": 0.5208893334985112,
+      "acc_stderr,none": "N/A"
+    }
+  },
+  "n-samples": {
+    "truthfulqa_mc2": {
+      "original": 817,
+      "effective": 817
+    }
+  },
+  "elapsed_s": 160.3
+}

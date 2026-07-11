@@ -5,12 +5,15 @@ Code and per-example results for the paper:
 **Biological Continued Pretraining Reshapes the Capability Profile of a Foundation Model
 Without Catastrophic Forgetting** — Liang Wang (HUST).
 
-A **training-free re-analysis** of one lineage of a 26B-parameter Mixture-of-Experts model
-(Gemma-4-26B-A4B). We compare three checkpoints — instruction-tuned base, after biological
-continued pretraining (BioCPT, 8.7B tokens of DNA/protein/biomedical text), and after
-subsequent supervised fine-tuning (SFT) — across four capability axes.
+The study has two parts on a 26B-parameter Mixture-of-Experts model (Gemma-4-26B-A4B):
 
-## Key finding
+- **Part I — training-free re-analysis** of one checkpoint lineage (instruction-tuned base →
+  biological CPT → SFT) across four capability axes.
+- **Part II — a controlled seven-model experiment**: continue pretraining the same base under
+  one fixed recipe, varying *only* the data mixture (0/5/20/50% biological share, plus a
+  protein/DNA composition ablation), turning the observational claim into a causal one.
+
+## Key finding (Part I)
 
 Biological CPT does **not** cause catastrophic forgetting; it **lifts** the model on axes
 unrelated to biology, and SFT then **narrows** it back — a consistent CPT-lifts / SFT-narrows
@@ -30,6 +33,23 @@ division of labor.
 Vocabulary expansion alone (it → it-bio) is free (< 0.4 pt on every general metric), so the
 gains are attributable to CPT, not the tokenizer.
 
+## Key finding (Part II — controlled mixture experiment)
+
+Varying only the CPT data mixture (100M tokens each, one fixed recipe, from `it-bio`):
+
+| model | bio% | MMLU | GSM8K | homology-std (MCC) | homology-remote (MCC) | BixBench (MCC) |
+|---|---|---|---|---|---|---|
+| M0-base | 0 | **0.802** | **0.873** | 0.228 | −0.023 | 0.850 |
+| M1-bio5 | 5 | 0.801 | 0.867 | 0.270 | −0.055 | 0.882 |
+| M2-bio20 | 20 | 0.800 | 0.867 | 0.217 | −0.074 | **1.000** |
+| M3-bio50 | 50 | 0.796 | 0.861 | **0.375** | **0.088** | **1.000** |
+
+Raising biological share to 50% preserves the general axis (MMLU −0.6 pt, GSM8K −1.2 pt) while
+the biology axis rises **monotonically** — the two do not trade off. A composition ablation at
+fixed 20% share shows **DNA** most improves remote homology while **protein** most improves
+BixBench: the *type* of scientific data selects which capability is amplified. **Data mixture is
+a controllable, general-preserving lever on the capability profile.**
+
 ## Checkpoints & data
 
 - **BioCPT** (merged): [`dnagpt/OmniGene-4-CPT-v2-merged`](https://huggingface.co/dnagpt/OmniGene-4-CPT-v2-merged)
@@ -47,7 +67,16 @@ scripts/   evaluation harness (all reproduce on a single 96GB GPU, sm_120 groupe
   make_figs.py           paper figures
   run_phase1_*.sh        full sweeps over the 4 checkpoints
 results/   per-(checkpoint, task) JSON + summary tables (PHASE1_*.md)
-paper/     LaTeX source, figures, compiled PDF
+scripts_phase2/  controlled mixture-CPT experiment (Part II)
+  prepare_pools.py       tokenize each source into a reusable pool
+  run_cpt_mix.py         QLoRA CPT at a given data mixture (TAG, MIX, MIX_TOKENS)
+  launch_parallel.sh     train the 7 models, one per GPU (auto-detects card count)
+  bt2_load.py            reconstruct a CPT model (base + LoRA + trained embedding)
+  run_eval.py / run_eval_bio.py   general + biology eval by model tag
+  collect_results.py / make_figs.py   summary table + figures
+  sm120_guard.py         dtype-safe MoE fallback for Blackwell (sm_120) training
+results_phase2/  per-(model, task) JSON + phase2_summary.csv + figures
+paper/     LaTeX source (Part I + Part II sections), figures, compiled PDF
 ```
 
 ## Reproducing
