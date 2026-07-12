@@ -1,0 +1,22 @@
+{
+  "tag": "nl_seed2",
+  "task": "anagrams2_local",
+  "num_fewshot": 0,
+  "limit": null,
+  "results": {
+    "anagrams2_local": {
+      "name": "anagrams2_local",
+      "alias": "anagrams2_local",
+      "sample_len": 10000,
+      "exact_match,none": 0.0,
+      "exact_match_stderr,none": "N/A"
+    }
+  },
+  "n-samples": {
+    "anagrams2_local": {
+      "original": 10000,
+      "effective": 10000
+    }
+  },
+  "elapsed_s": 162.0
+}

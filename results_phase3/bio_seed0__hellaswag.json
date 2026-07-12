@@ -1,0 +1,24 @@
+{
+  "tag": "bio_seed0",
+  "task": "hellaswag",
+  "num_fewshot": 0,
+  "limit": null,
+  "results": {
+    "hellaswag": {
+      "name": "hellaswag",
+      "alias": "hellaswag",
+      "sample_len": 10042,
+      "acc,none": 0.28450507866958774,
+      "acc_stderr,none": "N/A",
+      "acc_norm,none": 0.3066122286397132,
+      "acc_norm_stderr,none": "N/A"
+    }
+  },
+  "n-samples": {
+    "hellaswag": {
+      "original": 10042,
+      "effective": 10042
+    }
+  },
+  "elapsed_s": 47.4
+}

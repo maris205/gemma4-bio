@@ -1,0 +1,22 @@
+{
+  "tag": "nl_seed1",
+  "task": "paws_en",
+  "num_fewshot": 0,
+  "limit": null,
+  "results": {
+    "paws_en": {
+      "name": "paws_en",
+      "alias": "paws_en",
+      "sample_len": 2000,
+      "acc,none": 0.498,
+      "acc_stderr,none": "N/A"
+    }
+  },
+  "n-samples": {
+    "paws_en": {
+      "original": 2000,
+      "effective": 2000
+    }
+  },
+  "elapsed_s": 9.6
+}

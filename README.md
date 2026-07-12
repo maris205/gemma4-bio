@@ -12,6 +12,9 @@ The study has two parts on a 26B-parameter Mixture-of-Experts model (Gemma-4-26B
 - **Part II — a controlled seven-model experiment**: continue pretraining the same base under
   one fixed recipe, varying *only* the data mixture (0/5/20/50% biological share, plus a
   protein/DNA composition ablation), turning the observational claim into a causal one.
+- **Part III — a small-model, matched-compute causal probe** (GPT-2, 3 seeds): asks the reverse
+  question — does biological CPT feed anything back into natural-language understanding — in a
+  regime with capability headroom the 26B model lacks.
 
 ## Key finding (Part I)
 
@@ -50,6 +53,25 @@ fixed 20% share shows **DNA** most improves remote homology while **protein** mo
 BixBench: the *type* of scientific data selects which capability is amplified. **Data mixture is
 a controllable, general-preserving lever on the capability profile.**
 
+## Key finding (Part III — small-model matched-compute causal probe)
+
+GPT-2 (124M): shared warmup (`nl_base`, 300M NL tokens), then two arms continued for an
+*identical* 200M tokens / 3,051 steps / optimizer schedule — only content differs (NL-only vs.
+50/50 protein+DNA). Mean over 3 seeds:
+
+| family | task | NL-arm | Bio-arm | Δ (Bio−NL), mean±sd |
+|---|---|---|---|---|
+| Structural | **PAWS-en** (paraphrase detection) | 0.498 | **0.529** | **+0.031 ± 0.009** |
+| Structural | Anagrams / cycle-letters / insertion / reversed (character-level) | 0.000 | 0.000 | floor at this scale (uninformative) |
+| Knowledge | HellaSwag | 0.291 | 0.285 | −0.006 ± 0.000 |
+| Knowledge | LAMBADA (long-range discourse) | 0.333 | 0.188 | **−0.146 ± 0.004** |
+
+A real, reproducible transfer (all 3 seeds agree in sign) to the direct NL counterpart of
+protein-homology detection — but a genuine cost to long-range discourse, and the character-level
+battery is simply unmeasurable at 124M (both arms floor at 0, consistent with the original
+GPT-3 paper's own report of this floor below tens-of-billions of parameters). Reported as a
+partial, not uniform, dissociation.
+
 ## Checkpoints & data
 
 - **BioCPT** (merged): [`dnagpt/OmniGene-4-CPT-v2-merged`](https://huggingface.co/dnagpt/OmniGene-4-CPT-v2-merged)
@@ -76,7 +98,17 @@ scripts_phase2/  controlled mixture-CPT experiment (Part II)
   collect_results.py / make_figs.py   summary table + figures
   sm120_guard.py         dtype-safe MoE fallback for Blackwell (sm_120) training
 results_phase2/  per-(model, task) JSON + phase2_summary.csv + figures
-paper/     LaTeX source (Part I + Part II sections), figures, compiled PDF
+scripts_phase3/  small-model matched-compute causal probe (Part III)
+  prepare_pools.py       tokenize NL/protein/DNA sources into GPT-2 pools
+  train.py               warmup or matched-compute continuation (STAGE, MIX, TOKENS)
+  run_tier1.sh            warmup -> 3 seeds x {NL,bio} arms, one GPU each
+  run_eval.py / launch_eval.sh   NL-probe battery by model tag
+  collect_results.py      per-seed delta + mean/sd, dissociation verdict
+  *_local.yaml             custom lm-eval tasks for the GPT-3-paper character battery
+                            (mirrors EleutherAI/unscramble, whose HF loading script is
+                            no longer supported by current `datasets`)
+results_phase3/  per-(model, task) JSON + tier1_summary.json
+paper/     LaTeX source (Part I + II + III sections), figures, compiled PDF
 ```
 
 ## Reproducing

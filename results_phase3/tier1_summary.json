@@ -1,0 +1,98 @@
+[
+  {
+    "task": "paws_en",
+    "hyp": "H1",
+    "mean_delta": 0.03100000000000001,
+    "sd": 0.008689073598491416,
+    "deltas": [
+      0.040500000000000036,
+      0.03300000000000003,
+      0.019499999999999962
+    ],
+    "verdict": "bio LIFTS  [as predicted]"
+  },
+  {
+    "task": "hellaswag",
+    "hyp": "H2",
+    "mean_delta": -0.005775741884086842,
+    "sd": 0.00028165974156004267,
+    "deltas": [
+      -0.005974905397331198,
+      -0.005974905397331198,
+      -0.005377414857598128
+    ],
+    "verdict": "bio HURTS  [as predicted]"
+  },
+  {
+    "task": "lambada_openai",
+    "hyp": "H2",
+    "mean_delta": -0.1457403454298467,
+    "sd": 0.0037462791216948833,
+    "deltas": [
+      -0.1405006792159907,
+      -0.14903939452745976,
+      -0.14768096254608967
+    ],
+    "verdict": "bio HURTS  [as predicted]"
+  },
+  {
+    "task": "anagrams1_local",
+    "hyp": "H1",
+    "mean_delta": 0.0,
+    "sd": 0.0,
+    "deltas": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "verdict": "noise"
+  },
+  {
+    "task": "anagrams2_local",
+    "hyp": "H1",
+    "mean_delta": 0.0,
+    "sd": 0.0,
+    "deltas": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "verdict": "noise"
+  },
+  {
+    "task": "cycle_letters_local",
+    "hyp": "H1",
+    "mean_delta": 0.0,
+    "sd": 0.0,
+    "deltas": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "verdict": "noise"
+  },
+  {
+    "task": "random_insertion_local",
+    "hyp": "H1",
+    "mean_delta": 0.0,
+    "sd": 0.0,
+    "deltas": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "verdict": "noise"
+  },
+  {
+    "task": "reversed_words_local",
+    "hyp": "H1",
+    "mean_delta": 0.0,
+    "sd": 0.0,
+    "deltas": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "verdict": "noise"
+  }
+]

@@ -31,6 +31,25 @@ target a desired capability profile by choosing not just how much scientific dat
 which kind. This is the operational form of the data-centric thesis: training-data composition
 is a design surface for the capability profile, not merely a source of facts.
 
+\subsection{The transfer is real, but scale-dependent and narrow}
+Parts I and II both concern a 26B model whose general axis is near ceiling on the benchmarks we
+use; ``preserved, not improved'' is the honest description of what data composition buys there.
+Part III asks the sharper causal question --- does biological sequence \emph{add} natural-
+language capability, not merely leave it undisturbed --- in a regime with headroom, and finds a
+real but narrow answer: paraphrase detection improves reproducibly, several other structural
+probes are unmeasurable at this scale, and a real cost appears in long-range discourse. This
+resolves an apparent tension rather than creating one. The forward-transfer hypothesis that
+motivates this paper --- a shared difference-detection structure between natural-language
+paraphrase and sequence homology --- predicts a \emph{specific} transfer target, not a general
+uplift of all natural-language skill; PAWS-en is exactly that target, and it is the one metric
+that moves. That the effect appears only where capacity is scarce (a $124$M full finetune) and
+not where it is abundant (a $26$B MoE with LoRA-isolated updates) is itself informative: it
+suggests biological CPT's natural-language footprint is a genuine but small-magnitude structural
+signal that a large, high-capacity model can absorb without displacing anything, while a small,
+fully-tuned model trades it against other capability. Data composition, in other words, shapes
+capability at every scale we tested, but what counts as a ``free'' addition versus a
+``competed-for'' resource depends on how much spare capacity the training regime leaves it.
+
 \subsection{Limitations}
 This is a training-free re-analysis of one lineage of one 26B MoE model; the CPT / SFT recipe is
 fixed, so we characterize \emph{this} lineage rather than establishing a scaling law. Part of the
@@ -43,4 +62,10 @@ mixture --- but is itself bounded: each model sees $100$M CPT tokens (a pilot bu
 find trends, not a scaling law), on one 26B MoE model. Whether the general-preserving,
 biology-lifting mixture behavior holds at $10\times$ the token budget, across model sizes, and
 for other scientific-data domains (code, mathematics, chemistry) remains open, and is the natural
-next step now that the lever itself is established.
+next step now that the lever itself is established. Part III is deliberately narrow: one small
+model (GPT-2, $124$M), one continuation recipe, and a character-level probe battery that is
+unmeasurable at this scale in either arm, so we can report only that PAWS-en transfers, not that
+the full structural family does. Whether the effect grows, saturates, or reverses at
+intermediate scales between $124$M and $26$B, and whether the long-range-discourse cost can be
+mitigated by a lower biological share or an NL-replay schedule, are the immediate next steps for
+this line of the mixture-pretraining program.

@@ -1,0 +1,22 @@
+{
+  "tag": "bio_seed1",
+  "task": "reversed_words_local",
+  "num_fewshot": 0,
+  "limit": null,
+  "results": {
+    "reversed_words_local": {
+      "name": "reversed_words_local",
+      "alias": "reversed_words_local",
+      "sample_len": 10000,
+      "exact_match,none": 0.0,
+      "exact_match_stderr,none": "N/A"
+    }
+  },
+  "n-samples": {
+    "reversed_words_local": {
+      "original": 10000,
+      "effective": 10000
+    }
+  },
+  "elapsed_s": 171.8
+}

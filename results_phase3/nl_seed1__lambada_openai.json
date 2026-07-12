@@ -1,0 +1,24 @@
+{
+  "tag": "nl_seed1",
+  "task": "lambada_openai",
+  "num_fewshot": 0,
+  "limit": null,
+  "results": {
+    "lambada_openai": {
+      "name": "lambada_openai",
+      "alias": "lambada_openai",
+      "sample_len": 5153,
+      "perplexity,none": 35.070083571787315,
+      "perplexity_stderr,none": "N/A",
+      "acc,none": 0.3320395885891714,
+      "acc_stderr,none": "N/A"
+    }
+  },
+  "n-samples": {
+    "lambada_openai": {
+      "original": 5153,
+      "effective": 5153
+    }
+  },
+  "elapsed_s": 16.1
+}

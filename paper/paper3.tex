@@ -44,6 +44,10 @@ biological sequence as structured scientific data that reshapes a model's capabi
 \item A controlled seven-model experiment (varying only the CPT data mixture) confirms this
 causally: raising biological share to 50\% preserves general ability (MMLU $-0.6$ pt) while
 biology rises monotonically --- data mixture is a general-preserving lever on capability.
+\item A small-model, matched-compute causal probe (GPT-2, 3 seeds) finds that biological CPT
+\emph{reproducibly lifts} paraphrase detection (PAWS-en, $+3.1$ pt) --- the direct structural
+counterpart of protein-homology transfer --- alongside a real cost to long-range discourse
+modeling, an honestly reported partial, not uniform, transfer.
 \end{itemize}
 
 \bigskip
@@ -64,7 +68,11 @@ scientific data --- biological sequence today, and by extension code, mathematic
 chemistry --- is not merely knowledge to be absorbed but a lever that reshapes what a foundation
 model can do. A controlled follow-up, in which we retrain the model seven times while changing
 only the data mixture, confirms the lever directly: more biological data buys more scientific
-capability at almost no cost to general ability.
+capability at almost no cost to general ability. A final, smaller-scale experiment asks the
+question in reverse: does biological training feed anything back into ordinary language
+understanding? Under a causal design that holds compute exactly fixed, it does --- reproducibly
+improving a model's ability to detect when two sentences paraphrase each other --- though not
+without cost elsewhere, a nuance we report honestly rather than smooth over.
 }}
 \bigskip
 
@@ -94,8 +102,16 @@ a protein/DNA composition ablation), shows that raising the biological share to 
 general axis essentially unchanged (MMLU $-0.6$ pt, GSM8K $-1.2$ pt) while biological capability
 rises monotonically (remote-homology MCC flips negative to positive; BixBench saturates), and
 the \emph{type} of scientific data selects which capability is amplified. Mixture ratio is thus
-a controllable, general-preserving lever on the capability profile. All checkpoints, evaluation
-code, and per-example outputs are public.
+a controllable, general-preserving lever on the capability profile. Finally, we ask the reverse
+question at a scale with capability headroom the 26B model lacks: does biological CPT feed
+anything back into ordinary language understanding? A matched-compute continuation experiment on
+GPT-2 (124M), holding token budget, steps, and optimizer identical between a biology-continued
+and a text-continued arm across three seeds, finds a real, reproducible transfer to the direct
+structural counterpart of protein-homology detection --- paraphrase detection (PAWS-en,
+$+3.1$ points, consistent in sign across all three seeds) --- alongside a genuine cost to
+long-range discourse modeling (LAMBADA, $-14.6$ points), a partial rather than uniform
+dissociation that we report honestly. All checkpoints, evaluation code, and per-example outputs
+are public.
 \end{abstract}
 
 \medskip
@@ -165,6 +181,11 @@ scientific data that reshapes a foundation model's capability profile. (v) A con
 seven-model mixture experiment that turns the observational claim causal: varying only the CPT
 data mixture, general ability is preserved across a $0\!-\!50\%$ biological share while biological
 ability rises monotonically, and data \emph{composition} selects which capability is amplified.
+(vi) A small-model, matched-compute causal probe of the reverse direction, showing that
+biological CPT reproducibly improves natural-language paraphrase detection --- the direct
+counterpart of the protein-homology transfer that motivates this line of work --- while honestly
+reporting a real cost to long-range discourse and a scale at which character-level structural
+probes are simply unmeasurable.
 
 % ===================================================================
 \section{Setup: one lineage, three checkpoints}
@@ -182,6 +203,11 @@ ability rises monotonically, and data \emph{composition} selects which capabilit
 \input{sec_phase2}
 
 % ===================================================================
+\section{Part III --- A small-model, matched-compute causal probe}
+\label{sec:phase3}
+\input{sec_phase3}
+
+% ===================================================================
 \section{Discussion}
 \label{sec:discussion}
 \input{sec_discussion}
@@ -195,7 +221,11 @@ the project repository. All benchmarks (MMLU, ARC, HellaSwag, TruthfulQA, MBPP, 
 GSM8K, BixBench) are public; no proprietary data were used. The Part~I re-analysis is
 training-free; the seven controlled Part~II CPT models ($100$M tokens each) together with their
 QLoRA adapters, data-mixture recipes, and per-example evaluation outputs are also released at
-the project repository. Both parts reproduce on a single 96\,GB GPU.
+the project repository. Part~II reproduces on a single 96\,GB GPU. The Part~III GPT-2 models
+(one shared \texttt{nl\_base} plus six matched-compute continuation checkpoints, $3$ seeds
+$\times$ 2 arms) are full-parameter finetunes released at the same repository together with the
+character-manipulation probe data (mirrored from the original GPT-3-paper release) and reproduce
+on a single consumer-grade GPU in under two hours total.
 
 \section*{Acknowledgments}
 % [placeholder]

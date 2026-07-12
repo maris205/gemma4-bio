@@ -1,0 +1,22 @@
+{
+  "tag": "bio_seed0",
+  "task": "random_insertion_local",
+  "num_fewshot": 0,
+  "limit": null,
+  "results": {
+    "random_insertion_local": {
+      "name": "random_insertion_local",
+      "alias": "random_insertion_local",
+      "sample_len": 10000,
+      "exact_match,none": 0.0,
+      "exact_match_stderr,none": "N/A"
+    }
+  },
+  "n-samples": {
+    "random_insertion_local": {
+      "original": 10000,
+      "effective": 10000
+    }
+  },
+  "elapsed_s": 163.8
+}

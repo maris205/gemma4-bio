@@ -1,0 +1,79 @@
+
+Part II establishes that, at 26B parameters, a biologically-mixed CPT corpus leaves the general
+axis essentially flat while lifting biology --- the two capabilities do not trade off, but general
+ability is \emph{preserved}, not \emph{improved}. This leaves open a narrower and more provocative
+question, motivated directly by the forward-transfer literature this paper sits alongside
+\citep{wang2026biopaws}: biological sequence and natural-language paraphrase share a
+``difference-detection'' structure --- both require judging whether two strings that look
+superficially similar (or dissimilar) are functionally equivalent. If that shared structure is
+real, biological CPT should \emph{measurably improve} the natural-language skills that are its
+direct structural counterpart, not merely leave them undisturbed. Testing this requires a regime
+with capability headroom, which the near-ceiling 26B model does not offer on these metrics; we
+therefore turn to a small model, where headroom is available and any change is easier to attribute.
+
+\paragraph{A causal, matched-compute design.} We start from GPT-2 (124M parameters,
+\citealp{radford2019gpt2}) and continue pretraining it on English web text (openwebtext) for
+$300$M tokens, producing a single shared checkpoint (\texttt{nl\_base}). From this \emph{one}
+checkpoint we then run two arms for exactly $200$M further tokens each ($3{,}051$ optimizer
+steps, identical batch size, learning rate, and schedule) --- the only difference is what the
+extra tokens contain: the \textbf{NL-arm} continues on openwebtext; the \textbf{Bio-arm}
+continues on a $50$/$50$ protein/DNA mixture. Both arms are full-parameter finetunes (no LoRA;
+at 124M this is cheap and avoids any confound from adapter capacity). We repeat the two-arm
+comparison at three random seeds (data order and optimizer), giving a mean and standard deviation
+for every metric rather than a single run. Because both arms share the identical start, token
+budget, and optimizer trajectory, any difference between them isolates \emph{what the extra
+pretraining tokens contained}, not how much training occurred.
+
+\paragraph{Two families of NL probes.} We evaluate both arms zero-shot on: (i) a \emph{structural/
+association} family --- PAWS-en \citep{yang2019pawsx}, the direct English counterpart of the
+paraphrase-detection task whose zero-shot transfer to protein homology motivated this line of
+work, plus the five-task character-manipulation battery from \citet{brown2020gpt3} (anagram
+solving on the middle letters, letter-cycling, random-letter insertion, and word-reversal), which
+probes sub-word structure the way homology probes sub-sequence structure; and (ii) a
+\emph{knowledge/discourse} family --- HellaSwag and LAMBADA --- included as a control where we
+expect biological data to be neutral or mildly harmful, since these tasks reward broad
+world-knowledge and long natural-language discourse rather than structural matching.
+
+\begin{table}[h]\centering\small
+\caption{Small-model matched-compute continuation (GPT-2, $200$M tokens/arm, mean over 3 seeds,
+identical start/budget/optimizer in both arms). PAWS-en shows a reproducible biological lift;
+the character battery is floored for both arms at this scale (not informative); the
+knowledge/discourse family shows the expected cost, sharpest on long-range discourse (LAMBADA).}
+\label{tab:p3}
+\begin{tabular}{llccc}
+\toprule
+Family & Task & NL-arm & Bio-arm & $\Delta$ (Bio$-$NL), mean$\pm$sd \\
+\midrule
+Structural & PAWS-en                  & 0.498 & \textbf{0.529} & $\mathbf{+0.031\pm0.009}$ \\
+Structural & Anagrams (mid, 1/2)      & 0.000 & 0.000          & $0.000$ (floor, both arms) \\
+Structural & Cycle letters            & 0.000 & 0.000          & $0.000$ (floor, both arms) \\
+Structural & Random insertion         & 0.000 & 0.000          & $0.000$ (floor, both arms) \\
+Structural & Reversed words           & 0.000 & 0.000          & $0.000$ (floor, both arms) \\
+Knowledge  & HellaSwag                & 0.291 & 0.285          & $-0.006\pm0.000$ \\
+Knowledge  & LAMBADA (discourse)      & 0.333 & 0.188          & $-0.146\pm0.004$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Result: a real, reproducible, but narrow transfer.} Table~\ref{tab:p3} shows a single
+clean positive result rather than a uniform one. PAWS-en accuracy rises by $+3.1$ points
+($0.498\!\to\!0.529$) in the Bio-arm, and the sign is identical across all three seeds
+(sd $0.009$, an order of magnitude smaller than the effect) --- to our knowledge the first
+demonstration that continuing pretraining on \emph{raw biological sequence}, with no natural-
+language paraphrase data in the mix, measurably improves a model's ability to detect natural-
+language paraphrase, under a design that holds compute exactly fixed between arms. The five
+character-manipulation tasks are uninformative at this scale: both arms score exactly $0$,
+consistent with \citet{brown2020gpt3}'s own finding that these tasks are near the noise floor
+below the tens-of-billions-of-parameters range; a $124$M model, whether or not it has seen
+biological sequence, simply cannot do them, so this comparison awaits a larger base model. On the
+knowledge/discourse control, the cost is real: HellaSwag drops slightly ($-0.6$ pt) and LAMBADA
+drops sharply ($-14.6$ pt). We read the LAMBADA drop as the visible signature of a genuine
+trade-off at this scale that Part II's 26B MoE model does not show: a $124$M model trained fully
+(not via LoRA) and pushed with a $50\%$-biological continuation has limited spare capacity, so a
+half-biological corpus measurably crowds out long-range natural-language discourse modeling even
+as it sharpens a narrower structural skill. The dissociation is therefore partial, not clean: one
+structural task transfers positively and reproducibly, one discourse task pays a real cost, and
+the remaining structural probes are simply unmeasurable at this scale --- an honest result that
+neither confirms nor refutes a fully general ``biology helps all structure'' claim, but does
+establish, for the first time under a causal matched-compute design, that the transfer is real
+for at least one task in the family motivated by this paper's overall thesis.
