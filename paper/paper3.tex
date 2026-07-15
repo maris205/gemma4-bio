@@ -19,8 +19,8 @@
 \linenumbers
 \captionsetup{font=small,labelfont=bf}
 
-\title{\textbf{Biological Continued Pretraining Reshapes the Capability\\
-Profile of a Foundation Model Without Catastrophic Forgetting}}
+\title{\textbf{Scientific Data Composition as a Capability-Shaping Mechanism\\
+for Foundation Models: Evidence from Biological Continued Pretraining}}
 
 \author{Liang Wang\thanks{Corresponding author. Email: wangliang.f@gmail.com}\\
 \small School of Artificial Intelligence and Automation\\
@@ -35,10 +35,11 @@ Profile of a Foundation Model Without Catastrophic Forgetting}}
 \begin{itemize}\itemsep2pt
 \item A training-free re-analysis of one 26B MoE lineage isolates the effect of biological
 continued pretraining (CPT) from tokenizer changes and from fine-tuning.
-\item Biological CPT does not cause catastrophic forgetting; it \emph{raises} general knowledge
-(MMLU $+13$ pts) and code generation (MBPP pass@1 $0.33\!\to\!0.63$).
-\item CPT also makes chain-of-thought reasoning 41\% shorter and near-backtrack-free while
-preserving accuracy --- an effect invisible to accuracy metrics.
+\item Biological CPT does not cause catastrophic forgetting; measured general-knowledge
+performance under likelihood evaluation \emph{rises} (MMLU $+13$ pts) alongside code generation
+(MBPP pass@1 $0.33\!\to\!0.63$).
+\item CPT also shifts the observable reasoning trajectory on chain-of-thought tasks 41\% shorter
+and near-revision-free while preserving accuracy --- an effect invisible to accuracy metrics.
 \item A consistent CPT-lifts / SFT-narrows division of labor recurs across four axes, reframing
 biological sequence as structured scientific data that reshapes a model's capability profile.
 \item A controlled seven-model experiment (varying only the CPT data mixture) confirms this
@@ -57,41 +58,49 @@ lifts capability without a matching routing dose-response --- two dissociable me
 \bigskip
 \noindent\fbox{\parbox{\linewidth}{%
 \textbf{The Bigger Picture.}\\[2pt]
-Adapting a general-purpose AI model to a specialized domain --- here, the language of DNA and
-proteins --- is usually assumed to come at a cost: teach it biology and it forgets how to reason
-about everything else. This ``no free lunch'' intuition shapes how practitioners budget compute
-and whether they attempt domain adaptation at all. We test the assumption directly, and without
-running any new training, by comparing three snapshots of the same model taken before and after
-biological training. The result overturns the intuition: feeding the model raw biological
-sequence made it \emph{better} at general knowledge, at writing code, and even changed \emph{how}
-it reasons --- producing shorter, more decisive chains of thought without losing accuracy. The
-gains appear during the sequence-pretraining stage and are partly given back during
-task-specific fine-tuning, revealing that the two stages play complementary rather than
-interchangeable roles. This suggests a broader principle for data-centric AI: structured
-scientific data --- biological sequence today, and by extension code, mathematics, and
-chemistry --- is not merely knowledge to be absorbed but a lever that reshapes what a foundation
-model can do. A controlled follow-up, in which we retrain the model seven times while changing
-only the data mixture, confirms the lever directly: more biological data buys more scientific
-capability at almost no cost to general ability. A final, smaller-scale experiment asks the
-question in reverse: does biological training feed anything back into ordinary language
-understanding? Under a causal design that holds compute exactly fixed, it does --- reproducibly
-improving a model's ability to detect when two sentences paraphrase each other --- though not
-without cost elsewhere, a nuance we report honestly rather than smooth over.
+As foundation models mature, the lever practitioners reach for less often is architecture and
+more often \emph{what the model is trained on} --- yet the composition of a pretraining corpus
+is usually treated as a budget to be minimized (how much of a specialized domain can we afford
+without hurting everything else) rather than a dial that can be turned deliberately to engineer
+a target capability profile. We test whether training-data composition is such a dial, using
+biological sequence --- DNA and protein, which share almost no surface statistics with natural
+language --- as a first, deliberately extreme case study. The usual assumption is that adapting
+a general-purpose model to so foreign a domain must come at a cost: teach it biology and it
+forgets how to reason about everything else. Comparing snapshots of the same model before and
+after biological training, without any new training of our own, overturns that intuition:
+feeding the model raw biological sequence left its general knowledge and code-writing ability
+intact and even changed how it reasons, producing shorter, less self-revising chains of thought.
+A seven-model controlled follow-up, in which we retrain the same base while varying only the
+data mixture, confirms this is a genuine dial rather than a property of one checkpoint: more
+biological data buys more scientific capability at almost no cost to general ability, and we
+show the same dial holds across a ten-fold range of model scale. A smaller, sharper experiment
+asks the question in reverse --- does biological training feed anything back into ordinary
+language understanding --- and finds that it does, reproducibly, on the one task that theory
+predicts it should, though not without a cost elsewhere that we report honestly rather than
+smooth over. Together the results reframe biological sequence not as a domain to be tolerated
+but as the first worked example of a broader principle: structured scientific data --- biology
+today, and by extension code, mathematics, and chemistry --- is a lever for engineering what a
+foundation model can do.
 }}
 \bigskip
 
 \begin{abstract}
-\noindent It is widely assumed that continued pretraining (CPT) on a narrow, out-of-distribution
-corpus such as raw biological sequence must trade away a general-purpose model's broad
-competence --- the ``alignment tax'' or catastrophic-forgetting intuition. We test this
-directly, without any new training, by re-analyzing three checkpoints from a single lineage
+\noindent Foundation-model capability is usually engineered through architecture and scale; we
+ask whether training-data \emph{composition} is itself a controllable dial for shaping what a
+model can do, using biological sequence --- DNA and protein, which share almost no surface
+statistics with natural language --- as a first, deliberately extreme test case. The standard
+intuition is that continued pretraining (CPT) on so narrow, out-of-distribution a corpus must
+trade away a general-purpose model's broad competence --- the ``alignment tax'' or
+catastrophic-forgetting view. We test this directly, without any new training, by re-analyzing
+three checkpoints from a single lineage
 of a 26B-parameter Mixture-of-Experts model (Gemma-4-26B-A4B): the instruction-tuned base,
 the same model after biological CPT (8.7B tokens of DNA, protein, and biomedical text), and
 after subsequent supervised fine-tuning (SFT). Across three independent capability axes ---
 general knowledge/reasoning (MMLU, ARC, HellaSwag), code generation (MBPP), and biomedical
 knowledge (BixBench) --- we find that biological CPT does \emph{not} degrade the model; it
-\textbf{lifts} it: MMLU $+13$ points, MBPP pass@1 nearly doubles ($0.33\!\to\!0.63$), and
-BixBench discrimination rises sharply (MCC $0.23\!\to\!0.92$). The single measured regression
+\textbf{lifts} it: MMLU rises $+13$ points under likelihood evaluation, MBPP pass@1 nearly
+doubles ($0.33\!\to\!0.63$), and BixBench discrimination rises sharply (MCC $0.23\!\to\!0.92$).
+The single measured regression
 is truthfulness (TruthfulQA $-8.8$ points), a small and interpretable domain drift. A clean
 vocabulary-expansion ablation ($<\!0.4$ pt on every general metric) confirms the gains are
 attributable to CPT, not tokenizer changes. Crucially, subsequent SFT \emph{narrows} the model
@@ -145,15 +154,20 @@ domain adaptation is a trade: one buys biological ability at the cost of general
 the practitioner's job is to minimize the damage.
 
 This paper argues that, for a modern Mixture-of-Experts foundation model, the intuition is
-wrong --- or at least incomplete. We show, by \emph{re-analysis of existing checkpoints and
-without any new training}, that biological CPT on a 26B-parameter model does not merely avoid
-catastrophic forgetting; it \emph{improves} the model on capability axes that have nothing to do
-with biology, including general knowledge (MMLU~\citep{hendrycks2020measuring}) and code
-generation (MBPP). We then show that
+wrong --- or at least incomplete --- and uses biological sequence as a first, deliberately
+extreme test case for a broader claim: that training-data \emph{composition} is a controllable
+lever for shaping a foundation model's capability profile, not merely a cost to be minimized.
+We show, by \emph{re-analysis of existing checkpoints and without any new training}, that
+biological CPT on a 26B-parameter model does not merely avoid catastrophic forgetting; measured
+performance \emph{rises} on capability axes that have nothing to do with biology, including
+general knowledge under likelihood evaluation
+(MMLU~\citep{hendrycks2020measuring}) and code generation (MBPP). We then show that
 the subsequent supervised fine-tuning (SFT) stage, far from adding capability, \emph{narrows}
 the model back toward its base competence on held-out axes. The picture that emerges is a clean
 division of labor between the two training stages, and it suggests a reframing of what
-biological data \emph{is} to a foundation model.
+biological data \emph{is} to a foundation model: not a domain to be tolerated, but the first
+worked example of a design surface --- data composition --- that Parts II--IV of this paper
+show is controllable, causal, and mechanistically dissociable from mere routing change.
 
 Our substrate is a Mixture-of-Experts model~\citep{shazeer2017sparse, fedus2022switch,
 jiang2024mixtral} (Gemma-4-26B-A4B~\citep{gemmateam2025}); the analysis is deliberately
@@ -181,8 +195,8 @@ composition and its effect on capability~\citep{gadre2021pile, hoffmann2022chinc
 \emph{what} a model is trained on shapes \emph{what} it can do; we provide a controlled,
 single-lineage instance of this principle where the manipulated variable is a scientific-sequence
 corpus and the readout spans knowledge, code, and reasoning behavior. To our knowledge no prior
-work reports that biological CPT \emph{improves} general and coding benchmarks, nor that it
-measurably alters reasoning style.
+work reports that biological CPT raises measured general and coding benchmark performance, nor
+that it measurably shifts the observable reasoning trajectory.
 
 \paragraph{Contributions.}
 (i) A training-free re-analysis protocol over a single checkpoint lineage that isolates the
