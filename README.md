@@ -15,6 +15,9 @@ The study has two parts on a 26B-parameter Mixture-of-Experts model (Gemma-4-26B
 - **Part III — a small-model, matched-compute causal probe** (GPT-2, 3 seeds): asks the reverse
   question — does biological CPT feed anything back into natural-language understanding — in a
   regime with capability headroom the 26B model lacks.
+- **Part IV — robustness and mechanism**: does the Part II pattern hold across a 10× model-scale
+  range (2.3B–26B)? does explicit replay recover anything uniform mixing might have cost? does
+  mixture ratio operate through the same router-reorganization mechanism as full CPT?
 
 ## Key finding (Part I)
 
@@ -72,6 +75,41 @@ battery is simply unmeasurable at 124M (both arms floor at 0, consistent with th
 GPT-3 paper's own report of this floor below tens-of-billions of parameters). Reported as a
 partial, not uniform, dissociation.
 
+## Key finding (Part IV — robustness and mechanism)
+
+**Scale robustness.** Repeating the Part II text-only-vs-bio50 contrast at two smaller dense
+Gemma-4 sizes (E2B 2.3B, E4B 4.5B) alongside the 26B MoE result:
+
+| model | MMLU (text→bio50) | BixBench MCC (text→bio50) |
+|---|---|---|
+| E2B (2.3B) | 0.576 → 0.578 (+0.2 pt) | 0.479 → **0.623** (+14.4 pt) |
+| E4B (4.5B) | 0.694 → 0.695 (+0.1 pt) | 0.680 → **0.781** (+10.1 pt) |
+| 26B-A4B | 0.802 → 0.796 (−0.6 pt) | 0.850 → **1.000** (+15.0 pt) |
+
+General-preservation and the BixBench lift both hold across a **10× parameter range**. Homology
+(harder, lower-sample-count) is noisier below 26B — likely a capability-floor effect on weaker
+dense models, reported honestly rather than smoothed over.
+
+**Replay control.** At fixed 50% biological share, 100M tokens (26B), explicit end-of-training
+text replay (10%/20% of tokens) vs. the uniformly-shuffled baseline:
+
+| model | replay | MMLU | homology-std MCC | BixBench MCC |
+|---|---|---|---|---|
+| M3-bio50 | 0% (uniform) | 0.796 | **0.375** | **1.000** |
+| R1 | 10% (tail) | 0.800 | 0.318 | **1.000** |
+| R2 | 20% (tail) | 0.795 | 0.266 | 0.873 |
+
+The general axis is already flat without replay — **there was nothing to recover**. Replay does
+not help and mildly *hurts* the biology axis (fewer effective bio tokens as replay fraction
+rises). A clean negative result.
+
+**Router mechanism.** Forward-hook analysis of all 30 MoE routers across every checkpoint: the
+full-CPT lineage (it-bio→BioCPT, 8.7B tokens) shows a large increase in biology-vs-language
+routing divergence (0.219→0.451), but the Phase-2 LoRA mixture sweep (M0→M3, 100M tokens) shows
+**no routing dose-response** (0.376–0.385, flat) despite a clear *capability* dose-response —
+capability shaping and routing reorganization are **dissociable mechanisms** that converge only
+at large (full-parameter) training budgets.
+
 ## Checkpoints & data
 
 - **BioCPT** (merged): [`dnagpt/OmniGene-4-CPT-v2-merged`](https://huggingface.co/dnagpt/OmniGene-4-CPT-v2-merged)
@@ -108,7 +146,19 @@ scripts_phase3/  small-model matched-compute causal probe (Part III)
                             (mirrors EleutherAI/unscramble, whose HF loading script is
                             no longer supported by current `datasets`)
 results_phase3/  per-(model, task) JSON + tier1_summary.json
-paper/     LaTeX source (Part I + II + III sections), figures, compiled PDF
+scripts_phase4/  robustness + mechanism follow-ups (Part IV)
+  prepare_pools_gemma_small.py   tokenize sources w/ E2B/E4B native tokenizer
+  run_scaling.py / run_scaling.sh   LoRA CPT on E2B/E4B (dense, no router)
+  scaling_load.py                reconstruct an E2B/E4B CPT model for eval
+  run_eval_scaling.py / run_eval_bio_scaling.py / launch_eval_scaling.sh
+  run_replay.sh                  replay-control sweep (reuses run_cpt_mix.py
+                                  with REPLAY_TAIL_FRAC/REPLAY_TEXT_SOURCE)
+  run_eval_replay.sh              eval the replay-control models
+  run_router_analysis.py / run_router_sweep.sh   30-router forward-hook JS
+                                  divergence analysis across every checkpoint
+  make_figs_part4.py              scaling / replay / router figures
+results_phase4/  scaling + replay eval JSON, router/ = per-checkpoint routing reports
+paper/     LaTeX source (Part I--IV sections), figures, compiled PDF
 ```
 
 ## Reproducing

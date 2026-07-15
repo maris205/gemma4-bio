@@ -48,6 +48,10 @@ biology rises monotonically --- data mixture is a general-preserving lever on ca
 \emph{reproducibly lifts} paraphrase detection (PAWS-en, $+3.1$ pt) --- the direct structural
 counterpart of protein-homology transfer --- alongside a real cost to long-range discourse
 modeling, an honestly reported partial, not uniform, transfer.
+\item The general-preserving pattern holds across a $10\times$ scale range (2.3B--26B); an
+explicit replay schedule has nothing to recover (uniform mixing was already general-preserving);
+and router analysis shows full CPT reorganizes expert routing while LoRA-scale mixture ratio
+lifts capability without a matching routing dose-response --- two dissociable mechanisms.
 \end{itemize}
 
 \bigskip
@@ -110,8 +114,17 @@ and a text-continued arm across three seeds, finds a real, reproducible transfer
 structural counterpart of protein-homology detection --- paraphrase detection (PAWS-en,
 $+3.1$ points, consistent in sign across all three seeds) --- alongside a genuine cost to
 long-range discourse modeling (LAMBADA, $-14.6$ points), a partial rather than uniform
-dissociation that we report honestly. All checkpoints, evaluation code, and per-example outputs
-are public.
+dissociation that we report honestly. We close three remaining gaps directly. The
+general-preserving pattern of the mixture experiment holds across a $10\times$ range of model
+scale ($2.3$B--$26$B, MMLU delta within noise at every size). An explicit end-of-training text
+replay schedule, tested against the uniformly-mixed baseline at matched tokens, changes nothing
+on the general axis (already flat) and mildly reduces biology-axis performance --- uniform
+mixing was not forgetting anything a replay buffer could recover. And router-level analysis
+across every checkpoint in this paper shows that full-parameter CPT visibly reorganizes
+expert-routing allocation between biological and linguistic inputs, while the LoRA-scale mixture
+sweep shows no such routing dose-response despite a clear capability dose-response --- capability
+shaping and routing reorganization are dissociable mechanisms that converge only at large
+training budgets. All checkpoints, evaluation code, and per-example outputs are public.
 \end{abstract}
 
 \medskip
@@ -185,7 +198,12 @@ ability rises monotonically, and data \emph{composition} selects which capabilit
 biological CPT reproducibly improves natural-language paraphrase detection --- the direct
 counterpart of the protein-homology transfer that motivates this line of work --- while honestly
 reporting a real cost to long-range discourse and a scale at which character-level structural
-probes are simply unmeasurable.
+probes are simply unmeasurable. (vii) Three robustness and mechanism checks that close the
+remaining gaps: the general-preserving pattern holds across a $10\times$ model-scale range;
+an explicit replay schedule has nothing to recover because uniform mixing was never forgetting
+anything at this budget; and router-level analysis dissociates capability shaping (present at
+LoRA scale) from routing reorganization (present only at full-CPT scale), a genuine mechanistic
+nuance rather than a clean confirmation of either extreme.
 
 % ===================================================================
 \section{Setup: one lineage, three checkpoints}
@@ -208,6 +226,11 @@ probes are simply unmeasurable.
 \input{sec_phase3}
 
 % ===================================================================
+\section{Part IV --- Robustness and mechanism}
+\label{sec:phase4}
+\input{sec_phase4}
+
+% ===================================================================
 \section{Discussion}
 \label{sec:discussion}
 \input{sec_discussion}
@@ -225,7 +248,13 @@ the project repository. Part~II reproduces on a single 96\,GB GPU. The Part~III 
 (one shared \texttt{nl\_base} plus six matched-compute continuation checkpoints, $3$ seeds
 $\times$ 2 arms) are full-parameter finetunes released at the same repository together with the
 character-manipulation probe data (mirrored from the original GPT-3-paper release) and reproduce
-on a single consumer-grade GPU in under two hours total.
+on a single consumer-grade GPU in under two hours total. Part~IV's four scaling models (Gemma-4
+E2B/E4B, text-only and $50\%$-biology, $100$M tokens each, from the public
+\texttt{google/gemma-4-E2B-it} / \texttt{gemma-4-E4B-it} checkpoints) and two replay-control
+models (26B, $100$M tokens each) are released alongside their LoRA adapters and evaluation
+outputs; the router-analysis code and per-checkpoint routing-divergence reports covering every
+checkpoint in this paper are released at the same repository. All of Part~IV reproduces on two
+96\,GB GPUs in under two days.
 
 \section*{Acknowledgments}
 % [placeholder]

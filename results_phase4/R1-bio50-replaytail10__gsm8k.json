@@ -1,0 +1,30 @@
+{
+  "tag": "R1-bio50-replaytail10",
+  "task": "gsm8k",
+  "mix": {
+    "text": 0.5,
+    "protein": 0.35,
+    "dna": 0.1,
+    "biolit": 0.05
+  },
+  "num_fewshot": 5,
+  "limit": null,
+  "results": {
+    "gsm8k": {
+      "name": "gsm8k",
+      "alias": "gsm8k",
+      "sample_len": 1319,
+      "exact_match,strict-match": 0.868081880212282,
+      "exact_match_stderr,strict-match": "N/A",
+      "exact_match,flexible-extract": 0.8726307808946171,
+      "exact_match_stderr,flexible-extract": "N/A"
+    }
+  },
+  "n-samples": {
+    "gsm8k": {
+      "original": 1319,
+      "effective": 1319
+    }
+  },
+  "elapsed_s": 2446.8
+}

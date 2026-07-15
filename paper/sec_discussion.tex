@@ -31,6 +31,23 @@ target a desired capability profile by choosing not just how much scientific dat
 which kind. This is the operational form of the data-centric thesis: training-data composition
 is a design surface for the capability profile, not merely a source of facts.
 
+\subsection{Capability shaping does not require routing reorganization}
+The router analysis of \S\ref{sec:router} complicates a tempting mechanistic story. It would be
+neat if the mixture experiment's capability dose-response were simply the LoRA-scale echo of the
+routing reorganization we observe in the full-CPT lineage --- more biology, more specialized
+experts, more biology capability. The data do not support that story: routing divergence in the
+mixture sweep is flat with respect to biological share even as capability rises monotonically,
+and a purely \emph{text-only} $100$M-token LoRA run already produces most of the routing shift
+that biological runs do. What this suggests instead is that a modest LoRA-scale CPT run shifts
+\emph{how} the model routes tokens in a largely data-agnostic way (any continued pretraining
+perturbs routing by a similar amount), while \emph{what capability that shift buys} still
+depends closely on what the model was shown. Capability and routing are therefore separable
+readouts of continued pretraining, not two views of the same underlying change, and only
+converge once the training budget is large enough (here, $8.7$B full-parameter tokens) to
+substantially reorganize the router itself. This is a useful clarification for anyone using
+routing metrics as a proxy for capability change under LoRA-scale adaptation: at this scale, the
+proxy does not track the target.
+
 \subsection{The transfer is real, but scale-dependent and narrow}
 Parts I and II both concern a 26B model whose general axis is near ceiling on the benchmarks we
 use; ``preserved, not improved'' is the honest description of what data composition buys there.
@@ -58,14 +75,20 @@ which does not affect the knowledge-heavy MMLU gain. Zero-shot sequence-homology
 measurable by simple probes, so that axis is argued indirectly. TruthfulQA is a genuine, if
 small, regression and we do not hide it. The controlled experiment of \S\ref{sec:phase2}
 addresses the observational limitation directly --- it fixes the recipe and varies only the data
-mixture --- but is itself bounded: each model sees $100$M CPT tokens (a pilot budget chosen to
-find trends, not a scaling law), on one 26B MoE model. Whether the general-preserving,
-biology-lifting mixture behavior holds at $10\times$ the token budget, across model sizes, and
-for other scientific-data domains (code, mathematics, chemistry) remains open, and is the natural
-next step now that the lever itself is established. Part III is deliberately narrow: one small
-model (GPT-2, $124$M), one continuation recipe, and a character-level probe battery that is
+mixture --- but was itself bounded: each model saw $100$M CPT tokens (a pilot budget chosen to
+find trends, not a scaling law), on one 26B MoE model. \S\ref{sec:scaling} closes the model-size
+gap (the general-preserving pattern holds from $2.3$B to $26$B) but not the token-budget gap:
+whether the pattern holds at $10\times$ the tokens, or for other scientific-data domains (code,
+mathematics, chemistry), remains open. Part III is deliberately narrow: one small model
+(GPT-2, $124$M), one continuation recipe, and a character-level probe battery that is
 unmeasurable at this scale in either arm, so we can report only that PAWS-en transfers, not that
-the full structural family does. Whether the effect grows, saturates, or reverses at
-intermediate scales between $124$M and $26$B, and whether the long-range-discourse cost can be
-mitigated by a lower biological share or an NL-replay schedule, are the immediate next steps for
-this line of the mixture-pretraining program.
+the full structural family does; whether the effect grows, saturates, or reverses at
+intermediate scales between $124$M and $2.3$B (our smallest Part IV model) remains open. We did
+test whether the long-range-discourse cost of Part II's uniform mixing could be mitigated by an
+explicit replay schedule (\S\ref{sec:replay}) --- it could not, because there was nothing to
+mitigate at this budget --- but did not test whether a \emph{lower} biological share changes
+that picture, nor whether Part III's full-parameter, single-model finding generalizes across
+seeds and model families the way Part II's LoRA finding does across three sizes. Finally, the
+router analysis of \S\ref{sec:router} covers only this one model family and MoE configuration;
+whether the LoRA/full-CPT routing dissociation is a general property of MoE continued
+pretraining or specific to this architecture and token regime is a question for future work.
