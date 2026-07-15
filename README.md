@@ -2,8 +2,8 @@
 
 Code and per-example results for the paper:
 
-**Biological Continued Pretraining Reshapes the Capability Profile of a Foundation Model
-Without Catastrophic Forgetting** — Liang Wang (HUST).
+**Scientific Data Composition as a Capability-Shaping Mechanism for Foundation Models:
+Evidence from Biological Continued Pretraining** — Liang Wang (HUST).
 
 The study has two parts on a 26B-parameter Mixture-of-Experts model (Gemma-4-26B-A4B):
 
@@ -179,8 +179,8 @@ Note: on Blackwell (sm_120) the scripts install a grouped-mm guard
 
 ```bibtex
 @article{wang2026biocpt,
-  title  = {Biological Continued Pretraining Reshapes the Capability Profile of a
-            Foundation Model Without Catastrophic Forgetting},
+  title  = {Scientific Data Composition as a Capability-Shaping Mechanism for
+            Foundation Models: Evidence from Biological Continued Pretraining},
   author = {Wang, Liang},
   year   = {2026},
   note   = {preprint}
