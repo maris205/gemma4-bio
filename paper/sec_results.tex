@@ -31,7 +31,7 @@ weak at raw-loglikelihood multiple choice, and CPT on raw text restores base-mod
 behavior --- but MMLU ($+13$ pt, knowledge-heavy) is a hard gain unaffected by this. Subsequent
 SFT returns all four metrics to near-base levels.
 
-\begin{table}[h]\centering\small
+\begin{table*}[t]\centering\small
 \caption{(1) General. Biological CPT lifts general knowledge/reasoning; SFT narrows it back.
 Loglikelihood multiple-choice; community-standard few-shot.}
 \label{tab:general}
@@ -45,7 +45,7 @@ Base (it-bio)    & 0.642 & 0.367 & 0.402 & 0.486 & 0.532 \\
 BioCPT+SFT       & 0.635 & 0.382 & 0.396 & 0.486 & 0.562 \\
 \bottomrule
 \end{tabular}
-\end{table}
+\end{table*}
 
 \subsection{Code capability nearly doubles}
 Code is a structured formal language, and the (3) Coding axis (Table~\ref{tab:coding}) shows the
@@ -108,7 +108,7 @@ reverses both. CPT shifts the generated trajectory toward shorter, less revision
 \label{fig:reasoning}
 \end{figure}
 
-\begin{table}[h]\centering\small
+\begin{table*}[t]\centering\small
 \caption{(4) Reasoning-behavior diagnostics on GSM8K (200 questions, $k{=}5$ samples, shared
 8-shot CoT). CPT shortens the generated chain and removes self-revision markers without hurting
 accuracy; SFT reverses both.}
@@ -123,7 +123,7 @@ Base (it-bio)    & 107.5 & 0.324 & 0.000 & 0.728 & 0.652 \\
 BioCPT+SFT       & 125.8 & 0.396 & 0.018 & 0.757 & 0.703 \\
 \bottomrule
 \end{tabular}
-\end{table}
+\end{table*}
 
 \subsection{Summary}
 Across every completed axis the ordering is identical: base $<$ \textbf{BioCPT} $>$ SFT, with

@@ -40,7 +40,7 @@ regime --- flips from below chance to positive ($-0.023\!\to\!+0.088$), and BixB
 the same models: the two do not trade off. Figure~\ref{fig:p2traj} plots the joint trajectory,
 the two-dimensional form of the capability-shaping curve.
 
-\begin{table}[h]\centering\small
+\begin{table*}[t]\centering\small
 \caption{Controlled mixture sweep from it-bio ($100$M tokens each, single fixed recipe).
 Raising biological share preserves the general axis (MMLU, GSM8K) while monotonically lifting
 the biology axis. All values loglikelihood-scored; homology/BixBench are MCC.}
@@ -55,7 +55,7 @@ Model & Bio\% & MMLU & GSM8K & TruthQA & Homology-std & Homology-rem & BixBench 
 \texttt{M3-bio50} & 50 & 0.796 & 0.861 & 0.519 & \textbf{0.375} & \textbf{0.088} & \textbf{1.000} \\
 \bottomrule
 \end{tabular}
-\end{table}
+\end{table*}
 
 \begin{figure}[h]\centering
 \includegraphics[width=0.78\linewidth]{figs/p2_fig1_mixture.pdf}

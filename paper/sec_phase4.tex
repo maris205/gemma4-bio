@@ -89,10 +89,12 @@ which inputs? We install forward hooks on all $30$ MoE routers and measure the J
 divergence between expert-routing distributions on protein, DNA, and natural-language prompts,
 for every checkpoint in this paper.
 
-The full-CPT lineage shows a clean, large effect: mean biology-vs-language routing divergence
-rises from $0.219$ (it-bio, no CPT) to $0.451$ (BioCPT, $8.7$B tokens) --- full CPT visibly
-reorganizes which experts serve which modality (Figure~\ref{fig:p4router}). The Phase-2 mixture
-sweep tells a different story. Despite the clear capability dose-response of
+The full-CPT lineage reproduces, on our own prompt set, the routing reorganization already
+reported for this checkpoint lineage~\citep{wang2026omnigene}: mean biology-vs-language routing
+divergence rises from $0.219$ (it-bio, no CPT) to $0.451$ (BioCPT, $8.7$B tokens) --- full CPT
+visibly reorganizes which experts serve which modality (Figure~\ref{fig:p4router}). We include
+this replication only as a baseline anchor; the new result is what the Phase-2 mixture sweep
+shows against it, and it tells a different story. Despite the clear capability dose-response of
 \S\ref{sec:phase2} (homology and BixBench rising monotonically with biological share), routing
 divergence across \texttt{M0-base} through \texttt{M3-bio50} is flat ($0.376$--$0.385$, no
 dose-response) --- and \texttt{M0-base} (\emph{text-only} LoRA CPT) already reaches nearly the
